@@ -1,0 +1,688 @@
+/* ==================== 1. RESET & BASE LAYOUT ==================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: #f4f7f4;
+}
+
+.hidden {
+  display: none !important;
+}
+
+
+/* ==================== 2. LOGIN PAGE STYLES ==================== */
+.login-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1; /* Creates a stacking context so z-index: -1 stays inside the container */
+  isolation: isolate;
+}
+
+.bg-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1; /* Placed behind login elements, but in front of body background */
+}
+
+.logo-container {
+  margin-bottom: 25px;
+  width: 120px;
+  height: 120px;
+  position: relative;
+  z-index: 1;
+}
+
+.logo-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.form-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 320px;
+}
+
+.input-group {
+  width: 100%;
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.input-group label {
+  font-size: 13px;
+  font-style: italic;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 6px;
+  margin-left: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.input-group input {
+  width: 100%;
+  height: 48px;
+  background-color: #d1d1d1;
+  border: 1px solid #b8b8b8;
+  border-radius: 20px;
+  padding: 0 20px;
+  font-size: 16px;
+  outline: none;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
+}
+
+.input-group input:focus {
+  background-color: #e0e0e0;
+  border-color: #888;
+}
+
+.login-btn {
+  width: 140px;
+  height: 40px;
+  background-color: #b8f0a0;
+  border: 1px solid #a0d888;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #000;
+  cursor: pointer;
+  margin-top: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s ease;
+}
+
+.login-btn:hover {
+  background-color: #a4e688;
+}
+
+
+/* ==================== 3. DASHBOARD CONTAINER & HEADER ==================== */
+.dashboard-container {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Top Branding Header */
+.top-header {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  border-bottom: 1px solid #e2e8e2;
+}
+
+.top-logo {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+}
+
+.top-brand-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.top-brand-title {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 32px;
+  font-weight: bold;
+  color: #1a1a1a;
+  letter-spacing: 1.5px;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.top-brand-subtitle {
+  font-size: 12px;
+  letter-spacing: 3.5px;
+  color: #005a24;
+  margin-top: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+
+/* ==================== 4. NAVIGATION & DROPDOWNS ==================== */
+.nav-bar {
+  width: 100%;
+  height: 52px;
+  background-color: #005a24;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  position: relative;
+}
+
+.nav-items {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-item {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s ease;
+  cursor: pointer;
+  padding: 16px 0;
+}
+
+.nav-item:hover, .nav-item.active {
+  color: #f7d117;
+}
+
+.nav-arrow {
+  font-size: 10px;
+  display: inline-block;
+  transform: scaleX(1.2);
+}
+
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #d8d8d8;
+  min-width: 220px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  z-index: 1000;
+  padding: 8px 0;
+  border: 1px solid #b0b0b0;
+}
+
+.dropdown-menu a {
+  color: #000000;
+  padding: 10px 18px;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2;
+  transition: background-color 0.2s;
+}
+
+.dropdown-menu a:hover {
+  background-color: #c0c0c0;
+  color: #000000;
+}
+
+.dropdown-container:hover .dropdown-menu {
+  display: block;
+}
+
+.portal-btn {
+  background-color: #ffffff;
+  color: #d9381e;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.portal-btn:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-1px);
+}
+
+
+/* ==================== 5. DASHBOARD MAIN CONTENT & PANELS ==================== */
+.dashboard-content {
+  flex: 1;
+  padding: 30px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.view-panel {
+  width: 100%;
+  max-width: 1100px;
+}
+
+#defaultView {
+  text-align: center;
+  max-width: 650px;
+}
+
+#defaultView h2 {
+  color: #005a24;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+#defaultView p {
+  color: #444;
+  font-size: 16px;
+}
+
+#defaultView .sub-info {
+  margin-top: 20px;
+  color: #666;
+  font-size: 14px;
+}
+
+.form-sub-text {
+  margin-top: 5px;
+  color: #444;
+  text-align: center;
+  font-size: 13px;
+}
+
+.ui-container {
+  width: 100%;
+  max-width: 1100px;
+}
+
+.section-header-title {
+  color: #005a24;
+  font-size: 22px;
+  font-weight: bold;
+  border-bottom: 2px solid #005a24;
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+}
+
+.card-panel {
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+
+.card-panel-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #005a24;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+/* ==================== 6. TABLES, BADGES & BUTTONS ==================== */
+.ui-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.ui-table th, .ui-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border: 1px solid #e0e0e0;
+}
+
+.ui-table th {
+  background-color: #f0f4f0;
+  color: #005a24;
+  font-weight: bold;
+}
+
+.th-center-chk {
+  width: 30px;
+  text-align: center;
+}
+
+.td-center {
+  text-align: center;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.badge-success { background: #d4edda; color: #155724; }
+.badge-warning { background: #fff3cd; color: #856404; }
+
+.btn-primary {
+  background-color: #005a24;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-primary.fixed-height-btn {
+  height: 36px;
+}
+
+.btn-primary.full-width-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.btn-primary:hover {
+  background-color: #003e19;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-secondary.fixed-height-btn {
+  height: 36px;
+}
+
+.btn-danger {
+  background-color: #d9381e;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-action-batch {
+  background-color: #f7d117;
+  color: #005a24;
+  border: 1px solid #c7a708;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-action-batch:hover {
+  background-color: #e5c00e;
+}
+
+
+/* ==================== 7. FORM GRIDS & SUB-TABS ==================== */
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.form-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.form-group.btn-align-end {
+  justify-content: flex-end;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group input, .form-group select {
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.flex-gap-8 {
+  display: flex;
+  gap: 8px;
+}
+
+.sub-nav-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 8px;
+}
+
+.sub-tab-btn {
+  background-color: #e2e8e2;
+  color: #005a24;
+  border: none;
+  padding: 8px 16px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.sub-tab-btn.active {
+  background-color: #005a24;
+  color: #ffffff;
+}
+
+/* Membership Form Styles */
+.dash-form-container {
+  width: 100%;
+  max-width: 650px;
+  margin: 20px auto 0;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-bottom: 12px;
+}
+
+.field-group.full-width {
+  width: 100%;
+}
+
+.field-group.field-label-only {
+  margin-bottom: 4px;
+}
+
+.dash-form-container .field-group label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 5px;
+}
+
+.dash-form-container .field-group input,
+.dash-form-container .field-group select {
+  height: 40px;
+  background-color: #dcdcdc;
+  border-radius: 20px;
+  border: none;
+  padding: 0 16px;
+  font-size: 13px;
+  outline: none;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.dash-form-container .field-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  cursor: pointer;
+}
+
+.form-action-center {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.dashboard-apply-btn {
+  width: 150px;
+  height: 42px;
+  background-color: #aef08b;
+  border: 1px solid #9ade76;
+  border-radius: 21px;
+  font-weight: bold;
+  font-size: 15px;
+  color: #000;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  transition: background-color 0.2s ease;
+}
+
+.dashboard-apply-btn:hover {
+  background-color: #98e872;
+}
+
+/* Profile Grid Display */
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.profile-item {
+  display: flex;
+  flex-direction: column;
+  background: #f8fbf8;
+  padding: 10px 14px;
+  border-radius: 4px;
+  border: 1px solid #e2e8e2;
+}
+
+.profile-label {
+  font-size: 11px;
+  color: #666;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.profile-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #005a24;
+  margin-top: 4px;
+}
+
+
+/* ==================== 8. FOOTER STYLES ==================== */
+.site-footer {
+  width: 100%;
+  background-color: #005a24;
+  color: #ffffff;
+  padding: 16px 40px;
+  font-size: 13px;
+  margin-top: auto;
+  border-top: 2px solid #003e19;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 8px;
+}
+
+.footer-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.footer-item a {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.footer-item a:hover {
+  color: #f7d117;
+}
+
+.footer-copyright {
+  font-size: 12px;
+  color: #e2e8e2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.footer-icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}

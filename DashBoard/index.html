@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NUEVA VIZCAYA ALAY KAPWA MULTI-PURPOSE COOPERATIVE - Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="dashboard-container">
+    
+    <!-- Top Branding Section -->
+    <div class="top-header">
+      <img src="LogoAlay.png" alt="Cooperative Logo" class="top-logo">
+      <div class="top-brand-details">
+        <h1 class="top-brand-title">NUEVA VIZCAYA ALAY KAPWA MULTI-PURPOSE COOPERATIVE</h1>
+        <p class="top-brand-subtitle">BAYOMBONG, NUEVA VIZCAYA, PHILIPPINES 3700</p>
+      </div>
+    </div>
+
+    <!-- Green Navigation Bar -->
+    <nav class="nav-bar">
+      <div class="nav-items">
+        <a href="#defaultView" id="navHome" class="nav-item active">HOME</a>
+        <a href="#studentsSection" id="navStudents" class="nav-item">STUDENTS</a>
+        
+        <!-- SERVICES WITH DROPDOWN MENU -->
+        <div class="dropdown-container">
+          <a href="#academicSetupSection" id="navServices" class="nav-item">SERVICES <span class="nav-arrow">&#128898;</span></a>
+          <div class="dropdown-menu">
+            <a href="#studentsSection">Student Management</a>
+            <a href="#academicSetupSection">Academic Setup</a>
+            <a href="#gradesSection">Grade Management & Computation</a>
+            <a href="#transcriptSection">Final Grades & TOR</a>
+            <a href="#reportsSection">Reports & Records</a>
+            <a href="#accountControlsSection">Student Account Controls</a>
+          </div>
+        </div>
+
+        <a href="#registrationSection" id="navRegistration" class="nav-item">REGISTRATION</a>
+        <a href="#gradesSection" id="navGrades" class="nav-item">GRADES</a>
+        <a href="#transcriptSection" id="navTranscript" class="nav-item">TRANSCRIPT</a>
+        <a href="#reportsSection" id="navReports" class="nav-item">REPORTS</a>
+        <a href="#usersSection" id="navUsers" class="nav-item">USERS MANAGEMENT</a>
+      </div>
+
+      <div>
+        <button class="portal-btn" id="logoutBtn">Logout</button>
+      </div>
+    </nav>
+
+    <!-- Main Content View -->
+    <main class="dashboard-content">
+      
+      <!-- 1. DASHBOARD / HOME VIEW -->
+      <div id="defaultView" class="view-panel">
+        <h2>Welcome to your Dashboard!</h2>
+        <p>You are successfully logged in as <strong id="currentUserDisplay">admin</strong>.</p>
+        <p class="sub-info">Select <strong>STUDENTS</strong> or use the navigation bar above to register students, manage subjects, grade computations, transcripts, reports, and user accounts.</p>
+      </div>
+
+      <!-- 2. STAGE 3 – STUDENT MANAGEMENT MODULE -->
+      <div id="studentsSection" class="view-panel hidden">
+        <h2 class="section-header-title">STUDENT MANAGEMENT & REGISTRATION</h2>
+
+        <!-- Add / Edit Student Form -->
+        <div class="card-panel">
+          <div class="card-panel-title"><span id="studentFormTitle">Student Registration Form</span></div>
+          <form id="studentRegistrationForm" onsubmit="event.preventDefault(); saveStudent();">
+            <input type="hidden" id="studentDbId">
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label>Student Number</label>
+                <input type="text" id="studentNumberInput" placeholder="e.g., 2026-0001" required>
+              </div>
+              <div class="form-group">
+                <label>First Name</label>
+                <input type="text" id="firstNameInput" placeholder="First Name" required>
+              </div>
+              <div class="form-group">
+                <label>Middle Name</label>
+                <input type="text" id="middleNameInput" placeholder="Middle Name">
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" id="lastNameInput" placeholder="Last Name" required>
+              </div>
+              <div class="form-group">
+                <label>Gender</label>
+                <select id="genderSelect" required>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Birth Date</label>
+                <input type="date" id="birthDateInput" required>
+              </div>
+              <div class="form-group">
+                <label>Program</label>
+                <select id="programSelect" required>
+                  <option value="BS Information Technology">BS Information Technology</option>
+                  <option value="BS Business Administration">BS Business Administration</option>
+                  <option value="BS Secondary Education">BS Secondary Education</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Year Level</label>
+                <select id="yearLevelSelect" required>
+                  <option value="1">1st Year</option>
+                  <option value="2">2nd Year</option>
+                  <option value="3">3rd Year</option>
+                  <option value="4">4th Year</option>
+                </select>
+              </div>
+              <div class="form-group btn-align-end flex-gap-8">
+                <button type="submit" class="btn-primary fixed-height-btn" id="saveStudentBtn">SAVE</button>
+                <button type="button" class="btn-secondary fixed-height-btn" onclick="clearStudentForm()">CLEAR</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Search & Filter Bar -->
+        <div class="card-panel">
+          <div class="card-panel-title"><span>Student Search & Directory</span></div>
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label>Search Student</label>
+              <input type="text" id="searchStudentInput" placeholder="Search by Student No. or Name..." onkeyup="searchStudents()">
+            </div>
+            <div class="form-group">
+              <label>Filter Status</label>
+              <select id="filterStatusSelect" onchange="searchStudents()">
+                <option value="All">All Statuses</option>
+                <option value="Active">Active Only</option>
+                <option value="Inactive">Inactive Only</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Students Table -->
+          <table class="ui-table" style="margin-top: 15px;">
+            <thead>
+              <tr>
+                <th>Student Number</th>
+                <th>Full Name</th>
+                <th>Program</th>
+                <th>Year Level</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="studentsDirectoryTable">
+              <tr>
+                <td><strong>2026-0001</strong></td>
+                <td>Dela Cruz, Juan D.</td>
+                <td>BS Information Technology</td>
+                <td>Year 2</td>
+                <td><span class="badge badge-success">Active</span></td>
+                <td>
+                  <button class="btn-primary" onclick="viewStudentProfile('2026-0001')">Profile</button>
+                  <button class="btn-action-batch" onclick="editStudent('2026-0001')">Edit</button>
+                  <button class="btn-danger" onclick="toggleStudentStatus(this)">Deactivate</button>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>2026-0002</strong></td>
+                <td>Santos, Maria C.</td>
+                <td>BS Information Technology</td>
+                <td>Year 1</td>
+                <td><span class="badge badge-success">Active</span></td>
+                <td>
+                  <button class="btn-primary" onclick="viewStudentProfile('2026-0002')">Profile</button>
+                  <button class="btn-action-batch" onclick="editStudent('2026-0002')">Edit</button>
+                  <button class="btn-danger" onclick="toggleStudentStatus(this)">Deactivate</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Detailed Student Profile Card View -->
+        <div id="studentProfileModal" class="card-panel hidden">
+          <div class="card-panel-title">
+            <span>Student Detailed Profile</span>
+            <button class="btn-danger" onclick="closeStudentProfile()">Close View</button>
+          </div>
+          <div class="profile-grid">
+            <div class="profile-item">
+              <span class="profile-label">Student Number</span>
+              <span class="profile-value" id="profStudentNumber">2026-0001</span>
+            </div>
+            <div class="profile-item">
+              <span class="profile-label">Full Name</span>
+              <span class="profile-value" id="profFullName">Juan D. Dela Cruz</span>
+            </div>
+            <div class="profile-item">
+              <span class="profile-label">Program & Year</span>
+              <span class="profile-value" id="profProgramYear">BS Information Technology - Year 2</span>
+            </div>
+            <div class="profile-item">
+              <span class="profile-label">Gender & Birth Date</span>
+              <span class="profile-value" id="profGenderBirth">Male | May 15, 2004</span>
+            </div>
+            <div class="profile-item">
+              <span class="profile-label">Account Status</span>
+              <span class="profile-value" id="profStatus">Active</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 3. REGISTRATION & ENROLLMENT VIEW -->
+      <div id="registrationSection" class="view-panel hidden">
+        <h2>Cooperative Member Application Form</h2>
+        <p class="form-sub-text">Please complete the form below to apply for cooperative membership.</p>
+
+        <form class="dash-form-container" id="dashboardApplicationForm">
+          <div class="field-group full-width field-label-only">
+            <label>Full Legal Name</label>
+          </div>
+          <div class="form-row">
+            <div class="field-group">
+              <input type="text" placeholder="First Name" required>
+            </div>
+            <div class="field-group">
+              <input type="text" placeholder="Middle Name">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field-group">
+              <input type="text" placeholder="Last Name" required>
+            </div>
+            <div class="field-group">
+              <input type="text" placeholder="Suffix (e.g., Jr., III)">
+            </div>
+          </div>
+
+          <div class="field-group full-width field-label-only">
+            <label>Birthday & Place of Birth</label>
+          </div>
+          <div class="form-row">
+            <div class="field-group">
+              <select required>
+                <option value="" disabled selected>Month</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <select id="daySelect" required>
+                <option value="" disabled selected>Day</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <input type="number" placeholder="Year" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field-group full-width">
+              <label>Personal Phone Number</label>
+              <input type="tel" placeholder="09XXXXXXXXX" required>
+            </div>
+          </div>
+
+          <div class="form-action-center">
+            <button type="submit" class="dashboard-apply-btn">Apply</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 4. ACADEMIC SETUP VIEW (SUBJECTS & TEACHERS) -->
+      <div id="academicSetupSection" class="ui-container view-panel hidden">
+        <h2 class="section-header-title">ACADEMIC SETUP — SUBJECT & FACULTY MANAGEMENT</h2>
+
+        <!-- Sub Tab Buttons -->
+        <div class="sub-nav-tabs">
+          <button class="sub-tab-btn active" id="btnTabStudents" onclick="switchAcademicSubTab('student-subjects-view', this)">Student Subject Setup & Approval</button>
+          <button class="sub-tab-btn" id="btnTabTeachers" onclick="switchAcademicSubTab('teacher-approval-view', this)">Teacher Subject Allocation</button>
+        </div>
+
+        <!-- Student Subject Enrollment Sub-panel -->
+        <div id="student-subjects-view">
+          <div class="card-panel">
+            <div class="card-panel-title"><span>Set / Enroll Subjects for Student</span></div>
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label>Select Student</label>
+                <select id="studentSelect">
+                  <option value="2026-0001">2026-0001 | Dela Cruz, Juan (Year 2)</option>
+                  <option value="2026-0002">2026-0002 | Santos, Maria (Year 1)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Select Course / Subject (1st - 4th Year)</label>
+                <select id="subjectSelect">
+                  <optgroup label="--- 1ST YEAR ---">
+                    <option value="IT101|Introduction to Computing|3|1">IT101 - Introduction to Computing (3 Units | 1st Year)</option>
+                    <option value="IT102|Computer Programming 1|3|1">IT102 - Computer Programming 1 (3 Units | 1st Year)</option>
+                  </optgroup>
+                  <optgroup label="--- 2ND YEAR ---">
+                    <option value="IT201|Database Management Systems|3|2">IT201 - Database Management Systems (3 Units | 2nd Year)</option>
+                    <option value="IT202|Web Systems and Technologies|3|2">IT202 - Web Systems and Technologies (3 Units | 2nd Year)</option>
+                  </optgroup>
+                </select>
+              </div>
+
+              <div class="form-group btn-align-end">
+                <button class="btn-primary fixed-height-btn" onclick="assignSubject()">Assign Subject</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-panel">
+            <div class="card-panel-title">
+              <span>Pending Student Subject Enrollments</span>
+              <div class="flex-gap-8">
+                <button class="btn-action-batch" onclick="toggleSelectAllStudents(this)">Check All</button>
+                <button class="btn-primary" onclick="approveAllSelectedStudents()">Approve All Selected</button>
+              </div>
+            </div>
+            
+            <table class="ui-table">
+              <thead>
+                <tr>
+                  <th class="th-center-chk">
+                    <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAllStudentsCheckbox(this)">
+                  </th>
+                  <th>Student ID</th>
+                  <th>Student Name</th>
+                  <th>Subject Code</th>
+                  <th>Subject Title</th>
+                  <th>Units</th>
+                  <th>Year Level</th>
+                  <th>Status</th>
+                  <th>Admin Action</th>
+                </tr>
+              </thead>
+              <tbody id="studentApprovalTable">
+                <tr>
+                  <td class="td-center"><input type="checkbox" class="student-select-chk"></td>
+                  <td>2026-0001</td>
+                  <td>Dela Cruz, Juan</td>
+                  <td><strong>IT201</strong></td>
+                  <td>Database Management Systems</td>
+                  <td>3</td>
+                  <td>2nd Year</td>
+                  <td><span class="badge badge-warning">Pending Approval</span></td>
+                  <td>
+                    <button class="btn-primary" onclick="approveStudent(this)">Approve</button>
+                    <button class="btn-danger" onclick="rejectStudent(this)">Reject</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Teacher Subject Allocation Sub-panel -->
+        <div id="teacher-approval-view" class="hidden">
+          <div class="form-grid-2">
+            <div class="card-panel">
+              <div class="card-panel-title"><span>1. Add New Teacher / Faculty Member</span></div>
+              <div class="form-group">
+                <label>Teacher Full Name</label>
+                <input type="text" id="newTeacherName" placeholder="e.g., Prof. Elena Santos">
+              </div>
+              <div class="form-group">
+                <label>Department</label>
+                <select id="newTeacherDept">
+                  <option value="College of IT">College of IT</option>
+                  <option value="College of Business Administration">College of Business Administration</option>
+                </select>
+              </div>
+              <button class="btn-primary full-width-btn" onclick="addNewTeacher()">+ Add Teacher to System</button>
+            </div>
+
+            <div class="card-panel">
+              <div class="card-panel-title"><span>2. Assign Teacher to Subject</span></div>
+              <div class="form-group">
+                <label>Select Faculty / Teacher</label>
+                <select id="teacherSelect">
+                  <option value="Prof. A. Ramos|College of IT">Prof. A. Ramos (College of IT)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Select Target Subject (1st - 4th Year)</label>
+                <select id="teacherSubjectSelect">
+                  <option value="IT201|Database Management Systems|3|2">IT201 - Database Management Systems (3 Units | 2nd Year)</option>
+                </select>
+              </div>
+
+              <button class="btn-primary full-width-btn" onclick="assignTeacherToSubject()">+ Allocate Subject to Teacher</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. GRADES & GRADE COMPUTATION VIEW -->
+      <div id="gradesSection" class="view-panel hidden">
+        <h2 class="section-header-title">GRADES & GRADE COMPUTATION</h2>
+        <div class="card-panel">
+          <div class="card-panel-title"><span>Encode & Compute Student Grades</span></div>
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label>Select Student</label>
+              <select id="gradeStudentSelect">
+                <option value="2026-0001">2026-0001 | Dela Cruz, Juan</option>
+                <option value="2026-0002">2026-0002 | Santos, Maria</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Select Enrolled Subject</label>
+              <select id="gradeSubjectSelect">
+                <option value="IT101">IT101 - Introduction to Computing</option>
+                <option value="IT201">IT201 - Database Management Systems</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Prelim Grade (30%)</label>
+              <input type="number" id="prelimGrade" placeholder="0 - 100" min="0" max="100">
+            </div>
+            <div class="form-group">
+              <label>Midterm Grade (30%)</label>
+              <input type="number" id="midtermGrade" placeholder="0 - 100" min="0" max="100">
+            </div>
+            <div class="form-group">
+              <label>Finals Grade (40%)</label>
+              <input type="number" id="finalsGrade" placeholder="0 - 100" min="0" max="100">
+            </div>
+            <div class="form-group btn-align-end">
+              <button class="btn-primary fixed-height-btn" onclick="computeGrade()">Calculate & Save Grade</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-panel">
+          <div class="card-panel-title"><span>Computed Grade Records</span></div>
+          <table class="ui-table">
+            <thead>
+              <tr>
+                <th>Student ID</th>
+                <th>Student Name</th>
+                <th>Subject Code</th>
+                <th>Prelim</th>
+                <th>Midterm</th>
+                <th>Finals</th>
+                <th>Numerical Grade</th>
+                <th>Equivalent</th>
+                <th>Remarks</th>
+              </tr>
+            </thead>
+            <tbody id="gradeRecordsTable">
+              <tr>
+                <td>2026-0001</td>
+                <td>Dela Cruz, Juan</td>
+                <td>IT201</td>
+                <td>90</td>
+                <td>88</td>
+                <td>92</td>
+                <td>90.2%</td>
+                <td><strong>1.25</strong></td>
+                <td><span class="badge badge-success">Passed</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 6. FINAL GRADES & TRANSCRIPT OF RECORDS (TOR) VIEW -->
+      <div id="transcriptSection" class="view-panel hidden">
+        <h2 class="section-header-title">OFFICIAL GRADE TRANSCRIPT (TOR)</h2>
+        <div class="card-panel">
+          <div class="card-panel-title">
+            <span>Student Transcript Search</span>
+            <button class="btn-primary" onclick="window.print()">Print Official TOR</button>
+          </div>
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label>Select Student Record</label>
+              <select id="torStudentSelect">
+                <option value="2026-0001">2026-0001 | Dela Cruz, Juan — BS IT (Year 2)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-panel">
+          <div class="card-panel-title"><span>Transcript Summary</span></div>
+          <table class="ui-table">
+            <thead>
+              <tr>
+                <th>Term / Semester</th>
+                <th>Subject Code</th>
+                <th>Subject Title</th>
+                <th>Units</th>
+                <th>Grade</th>
+                <th>Remarks</th>
+              </tr>
+            </thead>
+            <tbody id="transcriptTable">
+              <tr>
+                <td>2nd Year - 1st Sem</td>
+                <td>IT201</td>
+                <td>Database Management Systems</td>
+                <td>3</td>
+                <td>1.25</td>
+                <td><span class="badge badge-success">Passed</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 7. REPORTS & RECORDS GENERATOR VIEW -->
+      <div id="reportsSection" class="view-panel hidden">
+        <h2 class="section-header-title">REPORTS & RECORDS GENERATOR</h2>
+        <div class="card-panel">
+          <div class="card-panel-title"><span>Academic & Enrollment Reports</span></div>
+          <p class="form-sub-text">Generate and print system-wide administrative reports.</p>
+          <div class="flex-gap-8" style="margin-top: 15px;">
+            <button class="btn-primary" onclick="window.print()">Print Official Enrollment Masterlist</button>
+            <button class="btn-primary" onclick="window.print()">Print Grade Summary Report</button>
+            <button class="btn-primary" onclick="window.print()">Print Student Directory</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. ACCOUNT CONTROLS / PROFILE VIEW -->
+      <div id="accountControlsSection" class="ui-container view-panel hidden">
+        <h2 class="section-header-title">ACCOUNT CONTROLS PANEL — STUDENT PROFILE</h2>
+
+        <div class="card-panel">
+          <div class="card-panel-title"><span>Personal Information</span></div>
+          <div class="profile-grid">
+            <div class="profile-item">
+              <span class="profile-label">Student Name</span>
+              <span class="profile-value">Juan Dela Cruz</span>
+            </div>
+            <div class="profile-item">
+              <span class="profile-label">Student No.</span>
+              <span class="profile-value">2026-0001</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. USER ACCOUNTS MANAGEMENT VIEW -->
+      <div id="usersSection" class="view-panel hidden">
+        <h2 class="section-header-title">USER ACCOUNTS MANAGEMENT</h2>
+        <div class="card-panel">
+          <div class="card-panel-title"><span>System Accounts List</span></div>
+          <table class="ui-table">
+            <thead>
+              <tr>
+                <th>User ID / Username</th>
+                <th>Full Name</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>admin</td>
+                <td>System Administrator</td>
+                <td>Administrator</td>
+                <td><span class="badge badge-success">Active</span></td>
+                <td><button class="btn-primary">Manage</button></td>
+              </tr>
+              <tr>
+                <td>2026-0001</td>
+                <td>Juan Dela Cruz</td>
+                <td>Student</td>
+                <td><span class="badge badge-success">Active</span></td>
+                <td><button class="btn-danger">Reset Password</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- FOOTER SECTION -->
+    <footer class="site-footer">
+      <div class="footer-content">
+        <div class="footer-item">
+          <span>NV Alay Kapwa MPCO</span>
+        </div>
+        <div class="footer-item">
+          <span>nvalaykapwa@yahoo.com</span>
+        </div>
+        <div class="footer-item">
+          <span>(078) 392-1342</span>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <span>Copyright &copy; 2026 www.nvalaykapwampco2.com. All Rights Reserved.</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
